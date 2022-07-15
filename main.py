@@ -1,53 +1,28 @@
-from modules import api_mad as api
-from modules import db_bicimad as bic
+import argparse
 from modules import find_bicimad as find
-import os
-import time
 
 
-# selected place
-#my_interest_place = "Casita - Museo del Ratón Pérez"
-my_interest_place = ""
-#my_interest_place = "Casita - Museo del Ratón Pérezzzzzzz"
-file = "BiciMAD_nearest.csv"
+# argument parser
+def argument_parser():
+    parser = argparse.ArgumentParser(description= 'App allows to find the nearest BiciMAD station to a set of places of interest.')
+    help_message ='Option 1: "1" get nearest BiciMAD for every place of interest. Option 2: "2" get nearest BiciMAD for a specific place of interest.' 
+    parser.add_argument('-o', '--option', help=help_message, type=str)
+    args = parser.parse_args()
+    return args
 
-def remove_results(f):
-    if os.path.isfile(f):
-        os.remove(f)
-
-def save_results(df, f):
-    df.to_csv(f)
-            
 def main():
-    # remove results file, if exists
-    remove_results(file)
-    # load datasets
-    places_dataset = api.load_datasets()
-    # get place(s)
-    df_my_place = api.get_place(my_interest_place, places_dataset)
-    # if place(s) is found, get bicimad nearest
-    if not df_my_place.empty:
-        # get bicimad (from csv -> at home, from DB -> at ironhack)
-        df_bicimad = bic.get_bicimad_data("CSV")
-        #df_bicimad = get_bicimad_data("DB")
-        if not df_bicimad.empty:
-            ########## TODOOOOOOOOOO
-            df_my_place = df_my_place[:10]
-            ##########
-            # get bicimad nearest for every place found
-            df_bicimad_result = find.get_bicimad_nearest(df_my_place, df_bicimad)
-            # save result as csv
-            save_results(df_bicimad_result, file)
-            print(f"save results in {file}")
-        else:
-            print(f"BiciMAD data not found")
+    if argument_parser().option == '1':
+        print("Calculate bicimad nearest for every place")
+        # get BiciMAD nearest for every place
+        find.every_place_bicimad()
+    elif argument_parser().option == '2':
+        name_place = input("Please, type a name of interest place: ")
+        print(f"Calculate bicimad nearest for {name_place}")
+        # get BiciMAD nearest for specific place
+        find.specific_place_bicimad(name_place)        
     else:
-        print(f"{my_interest_place} not found")
-
-
+        print("FATAL ERROR. You need to select the correct option.")
+        print('Option 1: "1" get nearest BiciMAD for every place of interest. Option 2: "2" get nearest BiciMAD for a specific place of interest.')
+    
 if __name__ == '__main__':
-    start = time.time()
-    print("start")
     main()
-    end = time.time()
-    print(f"time end: {end - start}")

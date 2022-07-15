@@ -9,9 +9,8 @@ from dotenv import load_dotenv
 
 # connect DB
 def connect_DB():
-    load_dotenv('../.env')
+    load_dotenv('./.env')
     DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD")
-    DATABASE_PASSWORD
     connectionDB = f'mysql+pymysql://ironhack_user:{DATABASE_PASSWORD}@173.201.189.217/BiciMAD'
     engineDB = create_engine(connectionDB)
     return engineDB
@@ -19,7 +18,8 @@ def connect_DB():
 # get data DB
 def get_db(engineDB):
     query = '''
-    SELECT * FROM bicimad_stations
+    SELECT * 
+    FROM bicimad_stations 
     '''
     df =pd.read_sql_query(query, engineDB)
     return df
@@ -34,9 +34,10 @@ def get_csv(file):
 
 # set longitud and latitud from coordinates
 def set_location(df):
-    df[['longitud','latitud']] = df['geometry.coordinates'].str.strip('][').str.split(', ', expand=True)
+    df[['lon_bici','lat_bici']] = df['geometry.coordinates'].str.strip('][').str.split(', ', expand=True)
     return df
 
+# get df bicimad
 def get_bicimad_data(origin):
     if origin == "CSV":
         df = get_csv("../datasets/bicimad_stations.csv")
