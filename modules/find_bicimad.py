@@ -13,12 +13,12 @@ file_map = "./results/BiciMAD_nearest.html"
 
 
 # set distance, add column distance df_bici
-def set_distance(df_bici, df_place):
-    df_bici['distance'] = df_bici.apply(lambda d: geo.distance_meters(float(d['lat_bici']), 
-                                                                      float(d['lon_bici']), 
-                                                                      df_place["lat_place"], 
-                                                                      df_place["lon_place"]), axis=1 )
-    return df_bici
+def set_distance(df_b, df_p):
+    df_b["distance"] = df_b.apply(lambda d: geo.distance_meters(float(d['lat_bici']), 
+                                                                float(d['lon_bici']), 
+                                                                df_p["lat_place"], 
+                                                                df_p["lon_place"]), axis=1 )
+    return df_b
 
 # get bicimad min distance
 def get_min_distance(df_bici):
@@ -44,11 +44,15 @@ def filter_df_bicimad(df, option):
 # get result: clean columns
 def get_bicimad_result(df):
     # rename
-    df_bici_result = df[["title", "type_place", "address", "name", "address"]].rename(columns={"title": "Place of interest",
-                                                                                          "type_place": "Type of place", 
-                                                                                          "address_place": "Place address",
-                                                                                          "name": "BiciMAD station",
-                                                                                          "address": "Station location"})
+    df_bici_result = df[["title", 
+                         "type_place", 
+                         "address", 
+                         "name", 
+                         "address"]].rename(columns={"title": "Place of interest",
+                                                     "type_place": "Type of place", 
+                                                     "address_place": "Place address",
+                                                     "name": "BiciMAD station",
+                                                     "address": "Station location"})
     return df_bici_result
 
 # get result: selected place + bicimad nearest
@@ -62,12 +66,13 @@ def get_result(df_place, df_bici):
     return df_result
 
 # get nearest from every place
-def get_nearest(df_place, df_bici):
+def get_nearest(df_place, df_bici, bike):
     # filter bike stations activate, available
-    df_bici_available = filter_df_bicimad(df_bici, "TAKE")
+    df_bici_available = filter_df_bicimad(df_bici, bike)
     #df_bici_available = df_bici
     # get every place
     df_result = pd.DataFrame([])
+    start = time.time()
     for p in range(len(df_place)):
         df_p = pd.DataFrame([df_place.iloc[p]])
         # calculate distance
@@ -78,10 +83,12 @@ def get_nearest(df_place, df_bici):
         df_bicimad_found = get_result(df_p, df_nearest)
         # join df results
         df_result = pd.concat([df_result, df_bicimad_found], axis=0)
+    end = time.time()
+    print(f"Process calculate distance min: {end-start}")
     return df_result
 
 # get biciMAD nearest
-def get_bicimad_nearest(interest_place):
+def get_bicimad_nearest(interest_place, bike):
     # create empty df as results
     df_result = pd.DataFrame([])
     
@@ -102,14 +109,17 @@ def get_bicimad_nearest(interest_place):
     print(f"Search in process...")
     
     # get bicimad (from csv -> at home, from DB -> at ironhack)
+    print("vamos por CSV...")
     df_bicimad = bic.get_bicimad_data("CSV")
+    #print("vamos por DB...")
     #df_bicimad = bic.get_bicimad_data("DB")
     if not df_bicimad.empty:
         ########## TODOOOOOOOOOO
-        df_my_place = df_my_place[:6]
+        #df_my_place = df_my_place[:6]
+        #print("testing only for 6 first")
         ##########
         # get bicimad nearest for every place found
-        df_result = get_nearest(df_my_place, df_bicimad)
+        df_result = get_nearest(df_my_place, df_bicimad, bike)
     else:
         print(f"BiciMAD data not found")
     
@@ -142,24 +152,46 @@ def save_bicimad_map(df):
     print(f"Save results in {file_map}")
 
 # get biciMAD for every place
-def every_place_bicimad():
+def every_place_bicimad(bike):
     # remove results file, if exists
     f.remove_file(file_csv)
     
     # get bicimad nearest
-    df_result = get_bicimad_nearest("")
+    df_result = get_bicimad_nearest("", bike)
     if not df_result.empty:
         # save result as csv
         save_bicimad_csv(df_result)
 
 # get biciMAD for specific place
-def specific_place_bicimad(interest_place):
+def specific_place_bicimad(interest_place, bike):
     # remove results map, if exists
     m.remove_map(file_map)
     
     # get bicimad nearest
-    df_result = get_bicimad_nearest(interest_place)
+    df_result = get_bicimad_nearest(interest_place, bike)
     if not df_result.empty:
-        print(df_result)
+        #print(df_result)
         # save result as map
         save_bicimad_map(df_result)
+        # save result as csv
+        save_bicimad_csv(df_result)
+
+# get biciMAD for every place to take a bike
+def every_place_take_bicimad():
+    bike = "TAKE"
+    every_place_bicimad(bike)
+
+# get biciMAD for every place to leave a bike
+def every_place_leave_bicimad():
+    bike = "LEAVE"
+    every_place_bicimad(bike)
+
+# get biciMAD for specific place to take a bike
+def specific_place_take_bicimad(interest_place):
+    bike = "TAKE"
+    specific_place_bicimad(interest_place, bike)
+
+# get biciMAD for specific place to leave a bike
+def specific_place_leave_bicimad(interest_place):
+    bike = "LEAVE"
+    specific_place_bicimad(interest_place, bike)

@@ -6,6 +6,7 @@ from modules import match_place as match
 
 DATASET_CULTURAL = "https://datos.madrid.es/egob/catalogo/200304-0-centros-culturales.json"
 DATASET_MUSEUM = "https://datos.madrid.es/egob/catalogo/201132-0-museos.json"
+#DATASET_PARKS = "https://datos.madrid.es/egob/catalogo/200761-0-parques-jardines.json"
 
 
 # get dataset from URL API Ayuntamiento Madrid
@@ -26,30 +27,21 @@ def join_datasets(dt1, dt2):
 def load_datasets():
     ds = join_datasets(get_dataset(DATASET_CULTURAL, "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"), 
                        get_dataset(DATASET_MUSEUM, "Museos de la ciudad de Madrid"))
+    #ds = get_dataset(DATASET_PARKS, "parques y jardines")
     return ds
-
-# create df selected place 
-def set_element_place(place):
-    place_json = {}
-    # get name 
-    place_json["title"] = place["title"]
-    # get type_place 
-    place_json["type_place"] = place["type_place"]
-    # get address 
-    place_json["address_place"] = place["address"]["street-address"]
-    # get latitude place 
-    place_json["lat_place"] = place["location"]["latitude"]
-    # get longitude place 
-    place_json["lon_place"] = place["location"]["longitude"]
-    return place_json
 
 # get places data
 def get_places_data():
     # load datasets
     places_dataset = load_datasets()
-    # create cleaned dataframe for places
-    list_json = [set_element_place(d) for d in places_dataset]
-    df = pd.DataFrame(list_json)
+    df = pd.json_normalize(places_dataset)[["title", 
+                                            "type_place", 
+                                            "address.street-address", 
+                                            "location.latitude", 
+                                            "location.longitude"]].rename(columns={"address.street-address": "address_place",
+                                                                                   "location.latitude": "lat_place",
+                                                                                   "location.longitude": "lon_place"})
+    df = df.dropna()
     return df
 
 # get place by name (the best match aprox)
