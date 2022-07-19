@@ -4,32 +4,31 @@ import pandas as pd
 from modules import match_place as match
 
 
-DATASET_CULTURAL = "https://datos.madrid.es/egob/catalogo/200304-0-centros-culturales.json" # "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"
-DATASET_MUSEUM = "https://datos.madrid.es/egob/catalogo/201132-0-museos.json" # "Museos de la ciudad de Madrid"
-DATASET_PARKS = "https://datos.madrid.es/egob/catalogo/200761-0-parques-jardines.json" # "Principales parques y jardines municipales"
-
+DATASETS = [{"url": "https://datos.madrid.es/egob/catalogo/200304-0-centros-culturales.json", 
+             "type_ds": "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"},
+            {"url": "https://datos.madrid.es/egob/catalogo/201132-0-museos.json",
+             "type_ds": "Museos de la ciudad de Madrid"}]
+            #{"url": "https://datos.madrid.es/egob/catalogo/200761-0-parques-jardines.json",
+            # "type_ds": "Principales parques y jardines municipales"}
 
 # get dataset from URL API Ayuntamiento Madrid
-def get_dataset(url, type_ds):
-    # get response of url and convert to json
-    response = requests.get(url)
-    dataset_json = response.json()
-    dataset = [dict(d, type_place=type_ds) for d in [dat for dat in dataset_json["@graph"]]]
-    return dataset
-
-# join n datasets
-def join_datasets(*args):
-    # join datasets (list of dict)
+def get_dataset(datas):
     dt_join = []
-    for d in args:
-        dt_join += d
+    # get every dataset 
+    if len(datas) > 0:   
+        for dict_ds in datas:
+            # get response of url and convert to json
+            response = requests.get(dict_ds["url"])
+            dataset_json = response.json()
+            dataset = [dict(d, type_place=dict_ds["type_ds"]) for d in [dat for dat in dataset_json["@graph"]]]
+            #join dataset
+            dt_join += dataset
     return dt_join
 
 # load selected datasets
 def load_datasets():
     # get and join datasets
-    ds = join_datasets(get_dataset(DATASET_CULTURAL, "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"), 
-                       get_dataset(DATASET_MUSEUM, "Museos de la ciudad de Madrid"))
+    ds = get_dataset(DATASETS)
     return ds
 
 # get places data
@@ -68,6 +67,7 @@ def get_place_data(name_place):
                 print(f"Matched interest place: {matched_name}")
             else:
                 df_my_place = pd.DataFrame([])
+                print(f"Not found interest place: {name_place}")
         # if name_place is empty, return all places
         else:
             df_my_place = df_all_places

@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 
 # connect DB
 def connect_DB():
-    load_dotenv('./.env')
+    load_dotenv("./.env")
     DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD")
     # DB mysql
-    connectionDB = f'mysql+pymysql://ironhack_user:{DATABASE_PASSWORD}@173.201.189.217/BiciMAD'
+    connectionDB = f"mysql+pymysql://ironhack_user:{DATABASE_PASSWORD}@173.201.189.217/BiciMAD"
     engineDB = create_engine(connectionDB)
     return engineDB
 
@@ -36,7 +36,7 @@ def get_csv(file):
 
 # set longitud and latitud from coordinates
 def set_location(df):
-    df[['lon_bici','lat_bici']] = df['geometry.coordinates'].str.strip('][').str.split(', ', expand=True)
+    df[["lon_bici","lat_bici"]] = df["geometry.coordinates"].str.strip("][").str.split(", ", expand=True)
     df.lon_bici = df.lon_bici.astype(float).fillna(0.0)
     df.lat_bici = df.lat_bici.astype(float).fillna(0.0)
     return df
@@ -57,11 +57,19 @@ def get_bicimad_data(origin):
 
 # get filtered bicimad stations take/leave bici and activate/available
 def get_filtered_bicimad_data(option):
-    # get bicimad (from csv -> at home, from DB -> at ironhack)
-    print("vamos por CSV...")
-    df = get_bicimad_data("CSV")
-    #print("vamos por DB...")
-    #df = get_bicimad_data("DB")
+    # get bicimad 
+    # from csv -> at home
+    # from DB -> at ironhack
+    # from API -> anywhere ¿???
+    origin = "CSV"
+    if origin == "CSV":
+        print("-------------------------------------------------> vamos por CSV...")
+        df = get_bicimad_data("CSV")
+    elif origin == "DB":
+        print("-------------------------------------------------> vamos por DB...")
+        df = get_bicimad_data("DB")
+    elif origin == "API":
+        print("-------------------------------------------------> vamos por API...")
     if not df.empty:
         # if option is take a bike, should be activate and available station and free bikes
         if option == "TAKE":

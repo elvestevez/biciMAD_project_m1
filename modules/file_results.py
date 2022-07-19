@@ -2,7 +2,17 @@ import folium
 import os
 import pandas as pd
 from UliPlot.XLSX import auto_adjust_xlsx_column_width
+import webbrowser
 
+
+def open_file(f):
+    if os.path.isfile(f):
+        # absolute path file to open
+        my_file = os.path.abspath(f)
+        # url file to open
+        url = f"file://{my_file}"
+        # open file
+        webbrowser.open(url,new=1)
 
 # remove file
 def remove_file(f):
@@ -10,11 +20,11 @@ def remove_file(f):
         os.remove(f)
 
 # save df in csv file
-def export_csv(df, f):
+def save_as_csv(df, f):
     df.to_csv(f, index=False)
 
 # save df in csv file
-def export_excel(df, f, sheet):
+def save_as_excel(df, f, sheet):
     #df.to_excel(f, sheet_name=sheet, index=False)
     with pd.ExcelWriter(f) as writer:
         df.to_excel(writer, sheet_name=sheet)
@@ -24,10 +34,7 @@ def export_excel(df, f, sheet):
 def calculate_zoom(l1, l2):
     dif_lat = abs(l1[0]-l2[0])
     dif_lon = abs(l1[1]-l2[1])
-    ###print(f"------------------------ dif_lat: {dif_lat}")
-    ###print(f"------------------------ dif_lon: {dif_lon}")
     funct_dif = (dif_lat + dif_lon) / 2 * 1000
-    ###print(f"++++++++++++++++++++++++ funct_dif: {funct_dif}")
     if funct_dif < 1:
         zoom = 17
     elif funct_dif >= 1 and funct_dif < 10:
@@ -38,7 +45,6 @@ def calculate_zoom(l1, l2):
         zoom = 14
     elif funct_dif >= 50:
         zoom = 13
-    ###print(f"*********************** zoom {zoom}")    
     return zoom
 
 # get mid point
@@ -80,12 +86,6 @@ def create_map(place, bike):
     # create map mid point
     f_map = folium.Map(location=mid["location"],
                        zoom_start=mid["zoom"])
-    
-    ###########################
-    ###folium.Marker(mid["location"], 
-    ###              tooltip="mid", 
-    ###              icon=folium.Icon(color="blue")).add_to(f_map)
-    
     # add marks location place and bike
     folium.Marker(loc_place, 
                   tooltip=name_place, 
@@ -101,6 +101,10 @@ def create_map(place, bike):
     return f_map
 
 # create a map with two marked points
-def export_map(l_place, l_bike, f):
+def save_as_map(l_place, l_bike, f):
+    # create map
     my_map = create_map(l_place, l_bike)
+    # save map
     my_map.save(f)
+    # open map
+    #############open_file(f)
