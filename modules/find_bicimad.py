@@ -8,10 +8,10 @@ from modules import geo_calculations as geo
 
 
 # name result file
-name_file_csv = "./results/BiciMAD_nearest.csv"
-name_file_excel = "./results/BiciMAD_nearest.xlsx"
+name_file_csv = "./data/results/BiciMAD_nearest.csv"
+name_file_excel = "./data/results/BiciMAD_nearest.xlsx"
 name_sheet_excel = "BiciMAD"
-name_file_map = "./results/BiciMAD_nearest.html"
+name_file_map = "./data/results/BiciMAD_nearest.html"
 
 
 # get clean result to export
@@ -63,9 +63,10 @@ def send_results_specific_place(df, dir_email):
     # export result as map
     export_bicimad_map(df, name_file_map)
     response = e.send_email(dir_email,
-                            "Response BiciMAD",
+                            "Response bichiMAD",
                             """
-                            Attachment file results nearest biciMAD.\n
+                            Hi,\n
+                            Attachment file results with nearest bike station.\n\n
                             Regards,
                             """, 
                             [name_file_map, name_file_excel])
@@ -79,9 +80,10 @@ def send_results_every_place(df, dir_email):
     # export result as excel
     export_bicimad_excel(df, name_file_excel, name_sheet_excel)
     response = e.send_email(dir_email,
-                            "Response BiciMAD",
+                            "Response bichiMAD",
                             """
-                            Attachment file results nearest biciMAD.\n
+                            Hi,\n
+                            Attachment file results with nearest bike station.\n\n
                             Regards,
                             """, 
                             [name_file_excel])
