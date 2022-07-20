@@ -39,7 +39,7 @@ def every_place_take_bicimad():
         # get BiciMAD nearest for every place to take a bike
         find.every_place_bicimad("TAKE", dir_email)
         end = time.time()
-        print(f"every_place_take_bicimad time: {end-start}")
+        print(f"-------------> every_place_take_bicimad time: {end-start}")
 
 # get bicimad nearest every place to leave a bike
 def every_place_leave_bicimad():
@@ -50,7 +50,7 @@ def every_place_leave_bicimad():
         # get BiciMAD nearest for every place to leave a bike
         find.every_place_bicimad("LEAVE", dir_email)
         end = time.time()
-        print(f"every_place_leave_bicimad time: {end-start}")
+        print(f"-------------> every_place_leave_bicimad time: {end-start}")
 
 # get bicimad nearest specific place to take a bike
 def specific_place_take_bicimad():
@@ -63,7 +63,7 @@ def specific_place_take_bicimad():
             # get BiciMAD nearest for specific place to take a bike
             find.specific_place_bicimad("TAKE", name_place, dir_email)
             end = time.time()
-            print(f"specific_place_bicimad time: {end-start}")
+            print(f"-------------> specific_place_bicimad time: {end-start}")
 
 # get bicimad nearest specific place to leave a bike
 def specific_place_leave_bicimad():
@@ -76,7 +76,7 @@ def specific_place_leave_bicimad():
             # get BiciMAD nearest for specific place to leave a bike
             find.specific_place_bicimad("LEAVE", name_place, dir_email)
             end = time.time()
-            print(f"specific_place_bicimad time: {end-start}")
+            print(f"-------------> specific_place_bicimad time: {end-start}")
 
 # argument parser
 def argument_parser():

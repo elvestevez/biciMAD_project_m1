@@ -1,34 +1,53 @@
-import folium
+import random
 import os
 import pandas as pd
+import folium
 from UliPlot.XLSX import auto_adjust_xlsx_column_width
-import webbrowser
 
 
-def open_file(f):
-    if os.path.isfile(f):
-        # absolute path file to open
-        my_file = os.path.abspath(f)
-        # url file to open
-        url = f"file://{my_file}"
-        # open file
-        webbrowser.open(url,new=1)
+path_file = "./data/results/"
 
 # remove file
 def remove_file(f):
     if os.path.isfile(f):
         os.remove(f)
 
-# save df in csv file
-def save_as_csv(df, f):
-    df.to_csv(f, index=False)
+# name csv file
+def get_file_name_csv():
+    ran = random.randrange(1000)
+    name_f = path_file + "info_" + str(ran) + ".csv"
+    return name_f
+
+# name xls file
+def get_file_name_excel():
+    ran = random.randrange(1000)
+    name_f = path_file + "info_" + str(ran) + ".xlsx"
+    return name_f
+
+# name html file
+def get_file_name_html():
+    ran = random.randrange(1000)
+    name_f = path_file + "map_" + str(ran) + ".html"
+    return name_f
 
 # save df in csv file
-def save_as_excel(df, f, sheet):
+def save_as_csv(df):
+    # get file name
+    f = get_file_name_csv()
+    df.to_csv(f, index=False)
+    return f
+
+# save df in csv file
+def save_as_excel(df):
+    # get file name
+    f = get_file_name_excel()
+    sheet = "bichiMAD"
     #df.to_excel(f, sheet_name=sheet, index=False)
     with pd.ExcelWriter(f) as writer:
         df.to_excel(writer, sheet_name=sheet)
+        # adjust width column to size of content
         auto_adjust_xlsx_column_width(df, writer, sheet_name=sheet, margin=0)
+    return f
 
 # get zoom
 def calculate_zoom(l1, l2):
@@ -101,10 +120,11 @@ def create_map(place, bike):
     return f_map
 
 # create a map with two marked points
-def save_as_map(l_place, l_bike, f):
+def save_as_map(l_place, l_bike):
     # create map
     my_map = create_map(l_place, l_bike)
+    # get file name
+    f = get_file_name_html()
     # save map
     my_map.save(f)
-    # open map
-    #############open_file(f)
+    return f

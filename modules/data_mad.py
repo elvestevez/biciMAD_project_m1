@@ -64,10 +64,10 @@ def get_place_data(name_place):
                 df_my_place = df_selected
                 # print found place
                 matched_name = df_selected.iloc[0]["title"]
-                print(f"Matched interest place: {matched_name}")
+                print(f"\nMatched interest place: {matched_name}")
             else:
                 df_my_place = pd.DataFrame([])
-                print(f"Not found interest place: {name_place}")
+                print(f"\nNot found interest place: {name_place}")
         # if name_place is empty, return all places
         else:
             df_my_place = df_all_places
