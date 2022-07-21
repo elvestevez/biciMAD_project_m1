@@ -10,7 +10,11 @@ path_file = "./data/results/"
 # remove file
 def remove_file(f):
     if os.path.isfile(f):
-        os.remove(f)
+        try: 
+            os.remove(f)
+        except:
+            return False
+    return f
 
 # name csv file
 def get_file_name_csv():
@@ -34,7 +38,10 @@ def get_file_name_html():
 def save_as_csv(df):
     # get file name
     f = get_file_name_csv()
-    df.to_csv(f, index=False)
+    try:
+        df.to_csv(f, index=False)
+    except:
+        return False
     return f
 
 # save df in csv file
@@ -44,9 +51,12 @@ def save_as_excel(df):
     sheet = "bichiMAD"
     #df.to_excel(f, sheet_name=sheet, index=False)
     with pd.ExcelWriter(f) as writer:
-        df.to_excel(writer, sheet_name=sheet)
-        # adjust width column to size of content
-        auto_adjust_xlsx_column_width(df, writer, sheet_name=sheet, margin=0)
+        try:
+            df.to_excel(writer, sheet_name=sheet)
+            # adjust width column to size of content
+            auto_adjust_xlsx_column_width(df, writer, sheet_name=sheet, margin=0)
+        except:
+            return False
     return f
 
 # get zoom
@@ -121,10 +131,13 @@ def create_map(place, bike):
 
 # create a map with two marked points
 def save_as_map(l_place, l_bike):
-    # create map
-    my_map = create_map(l_place, l_bike)
     # get file name
     f = get_file_name_html()
-    # save map
-    my_map.save(f)
+    try:
+        # create map
+        my_map = create_map(l_place, l_bike)
+        # save map
+        my_map.save(f)
+    except:
+        return False
     return f

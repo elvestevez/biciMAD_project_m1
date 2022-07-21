@@ -4,12 +4,12 @@ import pandas as pd
 from modules import match_place as match
 
 
-DATASETS = [{"url": "https://datos.madrid.es/egob/catalogo/200304-0-centros-culturales.json", 
-             "type_ds": "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"},
-            {"url": "https://datos.madrid.es/egob/catalogo/201132-0-museos.json",
-             "type_ds": "Museos de la ciudad de Madrid"}]
-            #{"url": "https://datos.madrid.es/egob/catalogo/200761-0-parques-jardines.json",
-            # "type_ds": "Principales parques y jardines municipales"}
+DATASETS = [#{"url": "https://datos.madrid.es/egob/catalogo/200304-0-centros-culturales.json", 
+            # "type_ds": "Centros Culturales Municipales (incluyen Socioculturales y Juveniles)"},
+            #{"url": "https://datos.madrid.es/egob/catalogo/201132-0-museos.json",
+            # "type_ds": "Museos de la ciudad de Madrid"},
+            {"url": "https://datos.madrid.es/egob/catalogo/200761-0-parques-jardines.json",
+             "type_ds": "Principales parques y jardines municipales"}]
 
 # get dataset from URL API Ayuntamiento Madrid
 def get_dataset(datas):

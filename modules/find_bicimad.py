@@ -12,7 +12,7 @@ from modules import geo_calculations as geo
 def remove_results(reports):
     if len(reports) > 0:
         for filename in reports:
-            print(f"-----------------------------------> borrando {filename}")
+            print(f"---------------------> borra fichero {filename}")
             res.remove_file(filename)
 
 #send reports
@@ -35,15 +35,18 @@ def send_results(reports, dir_email):
 # get clean result to export
 def get_bicimad_result(df):
     # select and rename columns
+    df = df.round({"distance": 2})
     df_bici_result = df[["title", 
                          "type_place", 
                          "address_place", 
                          "name", 
-                         "address"]].rename(columns={"title": "Place of interest",
-                                                     "type_place": "Type of place", 
-                                                     "address_place": "Place address",
-                                                     "name": "BiciMAD station",
-                                                     "address": "Station location"})
+                         "address",
+                         "distance"]].rename(columns={"title": "Place of interest",
+                                                      "type_place": "Type of place", 
+                                                      "address_place": "Place address",
+                                                      "name": "BiciMAD station",
+                                                      "address": "Station location",
+                                                      "distance": "Distance (meters)"})
     return df_bici_result
 
 # save biciMAD results as csv
@@ -51,6 +54,9 @@ def export_bicimad_csv(df):
     # get and rename columns final result
     df_bicimad_result = get_bicimad_result(df)
     f = res.save_as_csv(df_bicimad_result)
+    if f == False:
+        print("CSV file result couldn't be created")
+        return False
     return f
 
 # save biciMAD results as csv
@@ -58,6 +64,9 @@ def export_bicimad_excel(df):
     # get and rename columns final result
     df_bicimad_result = get_bicimad_result(df)
     f = res.save_as_excel(df_bicimad_result)
+    if f == False:
+        print("Excel file result couldn't be created")
+        return False
     return f
 
 # save biciMAD results as map
@@ -72,6 +81,9 @@ def export_bicimad_map(df):
     loc_bike["name"] = df.iloc[0]["name"]
     # generate map
     f = res.save_as_map(loc_place, loc_bike)
+    if f == False:
+        print("Map file result couldn't be created")
+        return False
     return f
 
 #send excel and map
@@ -80,23 +92,25 @@ def send_results_specific_place(df, dir_email):
     f_xlsx = export_bicimad_excel(df)
     # export result as map
     f_html = export_bicimad_map(df)
-    # list of reports
-    reports = [f_xlsx, f_html]
-    # send email
-    send_results(reports, dir_email)
-    # remove files after send
-    ######remove_results(reports)
+    if f_xlsx != False and f_html != False:
+        # list of reports
+        reports = [f_xlsx, f_html]
+        # send email
+        send_results(reports, dir_email)
+        # remove files after send
+        ###remove_results(reports)
     
 # send excel
 def send_results_every_place(df, dir_email):
     # export result as excel
     f_xlsx = export_bicimad_excel(df)
-    # list of reports
-    reports = [f_xlsx]
-    # send email
-    send_results(reports, dir_email)
-    # remove files after send
-    ######remove_results(reports)
+    if f_xlsx != False:
+        # list of reports
+        reports = [f_xlsx]
+        # send email
+        send_results(reports, dir_email)
+        # remove files after send
+        ###remove_results(reports)
     
 # get bicimad min distance
 def get_min_distance(df):
@@ -143,10 +157,15 @@ def get_bicimad_nearest(action, interest_place):
     # if bicimad and places are found
     if not df_bicimad_places.empty:
         print("\nSearching...")
-        # calculate distance for every place and all bicimad stations
-        df_bicimad_distance = calculate_distance_bicimad_places(df_bicimad_places)
-        # get place and bicimad min distance
-        df_bicimad_nearest = get_min_distance(df_bicimad_distance)
+        try:
+            # calculate distance for every place and all bicimad stations
+            df_bicimad_distance = calculate_distance_bicimad_places(df_bicimad_places)
+            # get place and bicimad min distance
+            df_bicimad_nearest = get_min_distance(df_bicimad_distance)
+        except:
+            print("Distance couldn't be calculated")
+            df_bicimad_nearest = pd.DataFrame([])
+            return df_bicimad_nearest
     else:
         df_bicimad_nearest = pd.DataFrame([])
     return df_bicimad_nearest
