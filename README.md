@@ -1,25 +1,23 @@
-![Logo](./img/logo_bichiMAD.png)
-
 # bichiMAD - Data Analytics Ironhack module 1
 
 bichiMAD find your closest available bike station in Madrid. Tour Madrid in a healthy, sustainable, traffic-free and cheap way.
 
-- Choose to take or leave a bike
-- Enter your email address
-- Enter a place (to match the most approximate available place of interest)
-- bichiMAD find your closest station to take or leave a bike (according to your choice)
-- Receive an e-mail with the results in a map!
+- Choose to take or leave a bike.
+- Enter your email address.
+- Enter a place (to match the most approximate available place of interest).
+- bichiMAD find your closest station to take or leave a bike (according to your choice).
+- Receive an e-mail with the results in a map and excel with details info!
 
     You can also choose to find the closest station for every place. You will receive an e-mail with an excel attached with the points of interest and their closest available bike station.
     
-> Available places: Museos de la ciudad de Madrid and Centros Culturales Municipales (incluyen Socioculturales y Juveniles) in [Portal de datos abiertos del Ayuntamiento de Madrid](https://datos.madrid.es/nuevoMadrid/swagger-ui-master-2.2.10/dist/index.html?url=/egobfiles/api.datos.madrid.es.json#/)
+> Available places: Museos de la ciudad de Madrid and Centros Culturales Municipales (incluyen Socioculturales y Juveniles) in [Portal de datos abiertos del Ayuntamiento de Madrid](https://datos.madrid.es/nuevoMadrid/swagger-ui-master-2.2.10/dist/index.html?url=/egobfiles/api.datos.madrid.es.json#/).
 
 ![Map](./img/map_bichiMAD.png)
 
 ---
 
 ### **Technology stack**
-Python, Pandas, APIs, SQL.
+Python, Pandas, REST API, SQL.
 
 ---
 
@@ -28,19 +26,17 @@ Get project from GitHub and create a python environment with these additional li
 - pandas
 - sqlalchemy
 - requests
-- json
-- shapely.geometry
 - geopandas
+- shapely
 - fuzzywuzzy
-- os
-- os.path
-- dotenv
+- python-levenshtein
 - folium
-- UliPlot.XLSX
-- smtplib
-- email
+- python-dotenv
+- uliplot
 
-Create .env file with secret datas
+> Review Requeriments.txt file.
+
+Create .env file with secret data
 
     DATABASE_PASSWORD
     API_CLIENTID
@@ -101,10 +97,10 @@ Example:
 ---
 
 ### **ToDo**
-Extend to another places in [Portal de datos abiertos del Ayuntamiento de Madrid](https://datos.madrid.es/nuevoMadrid/swagger-ui-master-2.2.10/dist/index.html?url=/egobfiles/api.datos.madrid.es.json#/)
+Extend to another places in [Portal de datos abiertos del Ayuntamiento de Madrid](https://datos.madrid.es/nuevoMadrid/swagger-ui-master-2.2.10/dist/index.html?url=/egobfiles/api.datos.madrid.es.json#/).
 
-Calculate walking distance (now is straight-line distance)
+Calculate walking distance (now is straight-line distance).
 
-Improve the quality of e-mail response
+Improve the quality of e-mail response.
 
-Apply a front-end layer
+Apply a front-end layer.

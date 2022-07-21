@@ -20,7 +20,7 @@ def send_results(reports, dir_email):
     subject_text = "Reports bichiMAD"
     body_text = """
                 Hi,\n
-                Attachment file results with nearest bike station.\n\n
+                Attachment file results with closest bike station.\n\n
                 Regards,
                 """
     response = email.send_email(dir_email,
