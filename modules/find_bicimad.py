@@ -15,6 +15,23 @@ def remove_results(reports):
             print(f"-----------------------------------> borrando {filename}")
             res.remove_file(filename)
 
+#send reports
+def send_results(reports, dir_email):
+    subject_text = "Reports bichiMAD"
+    body_text = """
+                Hi,\n
+                Attachment file results with nearest bike station.\n\n
+                Regards,
+                """
+    response = email.send_email(dir_email,
+                                subject_text,
+                                body_text, 
+                                reports)
+    if response == True:
+        print("\nE-mail sent")
+    else:
+        print("\nE-mail couldn't be sent")
+
 # get clean result to export
 def get_bicimad_result(df):
     # select and rename columns
@@ -58,23 +75,6 @@ def export_bicimad_map(df):
     return f
 
 #send excel and map
-def send_results(reports, dir_email):
-    subject_text = "Reports bichiMAD"
-    body_text = """
-                Hi,\n
-                Attachment file results with nearest bike station.\n\n
-                Regards,
-                """
-    response = email.send_email(dir_email,
-                                subject_text,
-                                body_text, 
-                                reports)
-    if response == True:
-        print("\nE-mail sent")
-    else:
-        print("\nE-mail couldn't be sent")
-
-#send excel and map
 def send_results_specific_place(df, dir_email):
     # export result as excel
     f_xlsx = export_bicimad_excel(df)
@@ -85,7 +85,7 @@ def send_results_specific_place(df, dir_email):
     # send email
     send_results(reports, dir_email)
     # remove files after send
-    ###remove_results(reports)
+    ######remove_results(reports)
     
 # send excel
 def send_results_every_place(df, dir_email):
@@ -96,11 +96,11 @@ def send_results_every_place(df, dir_email):
     # send email
     send_results(reports, dir_email)
     # remove files after send
-    ###remove_results(reports)
+    ######remove_results(reports)
     
 # get bicimad min distance
 def get_min_distance(df):
-    df_result = df.loc[df.groupby('title')['distance'].idxmin()].reset_index(drop=True)
+    df_result = df.loc[df.groupby("title")["distance"].idxmin()].reset_index(drop=True)
     return df_result
 
 # set distance, add column distance df_bici

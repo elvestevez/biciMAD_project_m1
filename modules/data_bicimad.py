@@ -7,6 +7,10 @@ import os
 from dotenv import load_dotenv
 
 
+# from CSV -> at home
+# from DB -> at ironhack
+# from API -> anywhere
+ORIGIN = "API"
 BICIMAD_STATIONS_CSV = "../datasets/bicimad_stations.csv"
 
 # connect DB
@@ -103,12 +107,15 @@ def set_location(df, origin):
 def get_bicimad_data(origin):
     # if origin bicimad is cvs file
     if origin == "CSV":
+        #print("-------------------------------------------------> vamos por CSV...")
         df = get_csv_stations(BICIMAD_STATIONS_CSV)
     # if origin bicimad is db
     elif origin == "DB":
+        #print("-------------------------------------------------> vamos por DB...")
         engineMySQL = connect_DB()
         df = get_db_stations(engineMySQL)
     elif origin == "API":
+        #print("-------------------------------------------------> vamos por API...")
         df = get_api_stations()
     # if df not empty
     if not df.empty:
@@ -118,19 +125,8 @@ def get_bicimad_data(origin):
 # get filtered bicimad stations take/leave bici and activate/available
 def get_filtered_bicimad_data(option):
     # get bicimad 
-    # from csv -> at home
-    # from DB -> at ironhack
-    # from API -> anywhere ¿???
-    origin = "API"
-    if origin == "CSV":
-        print("-------------------------------------------------> vamos por CSV...")
-        df = get_bicimad_data("CSV")
-    elif origin == "DB":
-        print("-------------------------------------------------> vamos por DB...")
-        df = get_bicimad_data("DB")
-    elif origin == "API":
-        print("-------------------------------------------------> vamos por API...")
-        df = get_bicimad_data("API")
+    data_origin = ORIGIN
+    df = get_bicimad_data(data_origin)
     if not df.empty:
         # if option is take a bike, should be activate and available station and free bikes
         if option == "TAKE":

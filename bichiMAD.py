@@ -39,7 +39,7 @@ def every_place_take_bicimad():
         # get BiciMAD nearest for every place to take a bike
         find.every_place_bicimad("TAKE", dir_email)
         end = time.time()
-        print(f"-------------> every_place_take_bicimad time: {end-start}")
+        #print(f"-------------> every_place_take_bicimad time: {end-start}")
 
 # get bicimad nearest every place to leave a bike
 def every_place_leave_bicimad():
@@ -50,7 +50,7 @@ def every_place_leave_bicimad():
         # get BiciMAD nearest for every place to leave a bike
         find.every_place_bicimad("LEAVE", dir_email)
         end = time.time()
-        print(f"-------------> every_place_leave_bicimad time: {end-start}")
+        #print(f"-------------> every_place_leave_bicimad time: {end-start}")
 
 # get bicimad nearest specific place to take a bike
 def specific_place_take_bicimad():
@@ -63,7 +63,7 @@ def specific_place_take_bicimad():
             # get BiciMAD nearest for specific place to take a bike
             find.specific_place_bicimad("TAKE", name_place, dir_email)
             end = time.time()
-            print(f"-------------> specific_place_bicimad time: {end-start}")
+            #print(f"-------------> specific_place_bicimad time: {end-start}")
 
 # get bicimad nearest specific place to leave a bike
 def specific_place_leave_bicimad():
@@ -76,7 +76,7 @@ def specific_place_leave_bicimad():
             # get BiciMAD nearest for specific place to leave a bike
             find.specific_place_bicimad("LEAVE", name_place, dir_email)
             end = time.time()
-            print(f"-------------> specific_place_bicimad time: {end-start}")
+            #print(f"-------------> specific_place_bicimad time: {end-start}")
 
 # argument parser
 def argument_parser():
@@ -95,11 +95,9 @@ def main():
     if argument_parser().option == '1':
         if argument_parser().action == 'T':
             # get bicimad nearest every place to take a bike
-            ###print("Calculate bicimad nearest for every place to take a bike")
             every_place_take_bicimad()
         elif argument_parser().action == 'L':
             # get bicimad nearest every place to leave a bike
-            ###print("Calculate bicimad nearest for every place to leave a bike")
             every_place_leave_bicimad()
         else:
             # error argument 2 (action)
@@ -108,11 +106,9 @@ def main():
     elif argument_parser().option == '2':
         if argument_parser().action == 'T':
             # get bicimad nearest specific place to take a bike
-            ###print(f"Calculate bicimad nearest specifici place to take a bike")
             specific_place_take_bicimad()
         elif argument_parser().action == 'L':
             # get bicimad nearest specific place to leave a bike
-            ###print(f"Calculate bicimad nearest specifici place to leave a bike")
             specific_place_leave_bicimad()
         else:
             # error argument 2 (action)

@@ -7,6 +7,7 @@ import os.path
 from dotenv import load_dotenv
 
 
+# send email
 def send_email(email_recipient, email_subject, email_message, attachment_location = []):
     
     load_dotenv("./.env")
