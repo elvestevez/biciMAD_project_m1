@@ -17,7 +17,7 @@ bichiMAD find your closest available bike station in Madrid. Tour Madrid in a he
 ---
 
 ### **Technology stack**
-Python, Pandas, REST API, SQL.
+Python, Pandas, Folium, REST API, SQL.
 
 ---
 

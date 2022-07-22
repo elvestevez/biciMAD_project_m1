@@ -12,7 +12,6 @@ from modules import geo_calculations as geo
 def remove_results(reports):
     if len(reports) > 0:
         for filename in reports:
-            print(f"---------------------> borra fichero {filename}")
             res.remove_file(filename)
 
 #send reports
@@ -41,12 +40,14 @@ def get_bicimad_result(df):
                          "address_place", 
                          "name", 
                          "address",
-                         "distance"]].rename(columns={"title": "Place of interest",
-                                                      "type_place": "Type of place", 
-                                                      "address_place": "Place address",
-                                                      "name": "BiciMAD station",
-                                                      "address": "Station location",
-                                                      "distance": "Distance (meters)"})
+                         "distance",
+                         "action"]].rename(columns={"title": "Place of interest",
+                                                    "type_place": "Type of place", 
+                                                    "address_place": "Place address",
+                                                    "name": "BiciMAD station",
+                                                    "address": "Station location",
+                                                    "distance": "Distance (meters)",
+                                                    "action": "Action bike"})
     return df_bici_result
 
 # save biciMAD results as csv
@@ -98,7 +99,7 @@ def send_results_specific_place(df, dir_email):
         # send email
         send_results(reports, dir_email)
         # remove files after send
-        ###remove_results(reports)
+        remove_results(reports)
     
 # send excel
 def send_results_every_place(df, dir_email):
@@ -110,7 +111,7 @@ def send_results_every_place(df, dir_email):
         # send email
         send_results(reports, dir_email)
         # remove files after send
-        ###remove_results(reports)
+        remove_results(reports)
     
 # get bicimad min distance
 def get_min_distance(df):

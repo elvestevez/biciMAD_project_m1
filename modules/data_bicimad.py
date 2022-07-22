@@ -103,6 +103,11 @@ def set_location(df, origin):
         df.lat_bici = df.lat_bici.astype(float).fillna(0.0)
     return df
 
+# set action take or leave a bike
+def set_action(df, action):
+    df["action"] = action
+    return df
+
 # get df bicimad
 def get_bicimad_data(origin):
     # if origin bicimad is cvs file
@@ -128,6 +133,7 @@ def get_filtered_bicimad_data(option):
     data_origin = ORIGIN
     df = get_bicimad_data(data_origin)
     if not df.empty:
+        df = set_action(df, option)
         # if option is take a bike, should be activate and available station and free bikes
         if option == "TAKE":
             mask = (df["activate"] == 1) & (df["no_available"] == 0) & ((df["dock_bikes"] - df["reservations_count"]) > 0)
